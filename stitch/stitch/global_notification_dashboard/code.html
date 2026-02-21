@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Global Notification Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2b6cee",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                        "surface-dark": "#1c2333", 
+                        "border-dark": "#2d3648",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"],
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "2xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 antialiased overflow-hidden">
+<div class="relative flex h-full min-h-screen w-full flex-col max-w-md mx-auto bg-background-light dark:bg-background-dark border-x border-slate-200 dark:border-border-dark shadow-2xl overflow-hidden">
+<!-- Status Bar Placeholder (iOS) -->
+<div class="h-12 w-full bg-background-light dark:bg-background-dark shrink-0 flex items-end justify-between px-6 pb-2 z-50">
+<span class="text-sm font-semibold dark:text-white">9:41</span>
+<div class="flex gap-1.5 items-center">
+<span class="material-symbols-outlined text-xs dark:text-white" style="font-size: 16px;">signal_cellular_alt</span>
+<span class="material-symbols-outlined text-xs dark:text-white" style="font-size: 16px;">wifi</span>
+<span class="material-symbols-outlined text-xs dark:text-white" style="font-size: 16px;">battery_full</span>
+</div>
+</div>
+<!-- Sticky Header Area -->
+<header class="shrink-0 bg-background-light dark:bg-background-dark z-40 border-b border-slate-200 dark:border-border-dark pb-2">
+<div class="flex items-center justify-between px-5 pt-2 pb-4">
+<h1 class="text-2xl font-bold tracking-tight">Dashboard</h1>
+<button class="relative p-2 rounded-full hover:bg-slate-200 dark:hover:bg-surface-dark transition-colors">
+<span class="material-symbols-outlined dark:text-slate-400">search</span>
+</button>
+</div>
+<!-- Horizontal Filter Scroll -->
+<div class="flex gap-3 px-5 overflow-x-auto no-scrollbar pb-2">
+<!-- Active Chip -->
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-primary px-4 shadow-lg shadow-primary/20 transition-all">
+<span class="material-symbols-outlined text-white" style="font-size: 18px;">grid_view</span>
+<span class="text-white text-xs font-semibold uppercase tracking-wide">All</span>
+</button>
+<!-- Inactive Chips -->
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark px-4 hover:border-primary/50 transition-colors">
+<span class="text-xs font-semibold dark:text-slate-400 text-slate-600 uppercase tracking-wide">API Gateway</span>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark px-4 hover:border-primary/50 transition-colors">
+<span class="text-xs font-semibold dark:text-slate-400 text-slate-600 uppercase tracking-wide">Auth Service</span>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark px-4 hover:border-primary/50 transition-colors">
+<span class="text-xs font-semibold dark:text-slate-400 text-slate-600 uppercase tracking-wide">Payments</span>
+</button>
+<button class="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark px-4 hover:border-primary/50 transition-colors">
+<span class="text-xs font-semibold dark:text-slate-400 text-slate-600 uppercase tracking-wide">Legacy</span>
+</button>
+</div>
+</header>
+<!-- Main Feed (Scrollable) -->
+<main class="flex-1 overflow-y-auto no-scrollbar p-4 space-y-4">
+<!-- Section Title -->
+<div class="flex justify-between items-end px-1">
+<p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Live Feed</p>
+<button class="text-xs text-primary font-medium">Mark all read</button>
+</div>
+<!-- Card 1: Critical -->
+<div class="group relative flex flex-col gap-3 rounded-xl bg-white dark:bg-surface-dark p-4 border border-slate-200 dark:border-border-dark shadow-sm hover:border-red-500/50 dark:hover:border-red-500/50 transition-colors">
+<!-- Header Row -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="flex h-6 w-6 items-center justify-center rounded bg-red-500/10 text-red-500">
+<span class="material-symbols-outlined" style="font-size: 16px;">database</span>
+</div>
+<span class="font-mono text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-tight">PAYMENT-SVC</span>
+</div>
+<span class="text-[11px] font-medium text-slate-400">Just now</span>
+</div>
+<!-- Body -->
+<div>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white leading-tight mb-1">Database Connection Timeout</h3>
+<p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2">
+                        Primary replica failed to respond after 3000ms. Automatic failover process initiated.
+                    </p>
+</div>
+<!-- Footer / Tags -->
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center rounded bg-red-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-500 border border-red-500/20">
+                        Critical
+                    </span>
+<span class="text-[10px] font-mono text-slate-500 dark:text-slate-500">Error 504</span>
+</div>
+<!-- Unread Indicator Dot -->
+<div class="absolute top-4 right-4 h-2 w-2 rounded-full bg-red-500 ring-4 ring-white dark:ring-surface-dark"></div>
+</div>
+<!-- Card 2: Info -->
+<div class="group relative flex flex-col gap-3 rounded-xl bg-white dark:bg-surface-dark p-4 border border-slate-200 dark:border-border-dark shadow-sm hover:border-primary/50 transition-colors">
+<!-- Header Row -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="flex h-6 w-6 items-center justify-center rounded bg-primary/10 text-primary">
+<span class="material-symbols-outlined" style="font-size: 16px;">person_add</span>
+</div>
+<span class="font-mono text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-tight">AUTH-SERVICE</span>
+</div>
+<span class="text-[11px] font-medium text-slate-400">2m ago</span>
+</div>
+<!-- Body -->
+<div>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white leading-tight mb-1">New User Registration</h3>
+<p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2">
+                        User ID <span class="font-mono text-slate-500">#88291</span> verified email via magic link successfully.
+                    </p>
+</div>
+<!-- Footer / Tags -->
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center rounded bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-primary border border-primary/20">
+                        Info
+                    </span>
+</div>
+</div>
+<!-- Card 3: Warning -->
+<div class="group relative flex flex-col gap-3 rounded-xl bg-white dark:bg-surface-dark p-4 border border-slate-200 dark:border-border-dark shadow-sm hover:border-amber-500/50 transition-colors">
+<!-- Header Row -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="flex h-6 w-6 items-center justify-center rounded bg-amber-500/10 text-amber-500">
+<span class="material-symbols-outlined" style="font-size: 16px;">memory</span>
+</div>
+<span class="font-mono text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-tight">API-GATEWAY</span>
+</div>
+<span class="text-[11px] font-medium text-slate-400">15m ago</span>
+</div>
+<!-- Body -->
+<div>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white leading-tight mb-1">High Memory Usage</h3>
+<p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2">
+                        Instance i-0x82f detected using 85% of available memory. Scaling policy triggered.
+                    </p>
+</div>
+<!-- Footer / Tags -->
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center rounded bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-500 border border-amber-500/20">
+                        Warning
+                    </span>
+</div>
+</div>
+<!-- Card 4: Info (Read) -->
+<div class="group relative flex flex-col gap-3 rounded-xl bg-slate-50/50 dark:bg-surface-dark/40 p-4 border border-slate-200 dark:border-border-dark shadow-sm opacity-80 hover:opacity-100 transition-opacity">
+<!-- Header Row -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="flex h-6 w-6 items-center justify-center rounded bg-slate-500/10 text-slate-500">
+<span class="material-symbols-outlined" style="font-size: 16px;">receipt_long</span>
+</div>
+<span class="font-mono text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-tight">INVOICE-WORKER</span>
+</div>
+<span class="text-[11px] font-medium text-slate-400">1h ago</span>
+</div>
+<!-- Body -->
+<div>
+<h3 class="text-sm font-bold text-slate-900 dark:text-slate-300 leading-tight mb-1">Monthly Report Generated</h3>
+<p class="text-xs text-slate-600 dark:text-slate-500 leading-relaxed line-clamp-2">
+                        Successfully generated 1,240 invoices for the billing cycle June 2024.
+                    </p>
+</div>
+<!-- Footer / Tags -->
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center rounded bg-slate-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-500 border border-slate-500/20">
+                        Log
+                    </span>
+</div>
+</div>
+<!-- Card 5: Critical -->
+<div class="group relative flex flex-col gap-3 rounded-xl bg-white dark:bg-surface-dark p-4 border border-slate-200 dark:border-border-dark shadow-sm hover:border-red-500/50 dark:hover:border-red-500/50 transition-colors">
+<!-- Header Row -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="flex h-6 w-6 items-center justify-center rounded bg-red-500/10 text-red-500">
+<span class="material-symbols-outlined" style="font-size: 16px;">lock</span>
+</div>
+<span class="font-mono text-[11px] font-medium text-slate-500 dark:text-slate-400 uppercase tracking-tight">SECURITY-OPS</span>
+</div>
+<span class="text-[11px] font-medium text-slate-400">3h ago</span>
+</div>
+<!-- Body -->
+<div>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white leading-tight mb-1">Failed Login Spike</h3>
+<p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-2">
+                        Detected 500+ failed login attempts from IP range 192.168.x.x within 1 minute.
+                    </p>
+</div>
+<!-- Footer / Tags -->
+<div class="flex items-center gap-2 mt-1">
+<span class="inline-flex items-center rounded bg-red-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-500 border border-red-500/20">
+                        Critical
+                    </span>
+<span class="text-[10px] font-mono text-slate-500 dark:text-slate-500">Rate Limit</span>
+</div>
+</div>
+<!-- Spacer for bottom nav visibility -->
+<div class="h-12"></div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="shrink-0 border-t border-slate-200 dark:border-border-dark bg-background-light dark:bg-background-dark pb-6 pt-3 px-6">
+<div class="flex justify-between items-center">
+<a class="flex flex-col items-center justify-center gap-1 group" href="#">
+<div class="flex h-8 w-12 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+<span class="material-symbols-outlined text-primary" style="font-size: 24px;">notifications</span>
+</div>
+<span class="text-[10px] font-medium text-primary">Feed</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 group" href="#">
+<div class="flex h-8 w-12 items-center justify-center rounded-full bg-transparent group-hover:bg-slate-200 dark:group-hover:bg-surface-dark transition-colors">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300" style="font-size: 24px;">layers</span>
+</div>
+<span class="text-[10px] font-medium text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300">Projects</span>
+</a>
+<a class="flex flex-col items-center justify-center gap-1 group" href="#">
+<div class="flex h-8 w-12 items-center justify-center rounded-full bg-transparent group-hover:bg-slate-200 dark:group-hover:bg-surface-dark transition-colors">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300" style="font-size: 24px;">settings</span>
+</div>
+<span class="text-[10px] font-medium text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-300">Settings</span>
+</a>
+</div>
+</nav>
+</div>
+</body></html>

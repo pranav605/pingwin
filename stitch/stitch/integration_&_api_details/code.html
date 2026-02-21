@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Integration &amp; API Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+            extend: {
+                colors: {
+                "primary": "#2b6cee",
+                "background-light": "#f6f6f8",
+                "background-dark": "#101622",
+                },
+                fontFamily: {
+                "display": ["Inter", "sans-serif"],
+                "mono": ["JetBrains Mono", "monospace"]
+                },
+                borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased min-h-screen flex justify-center">
+<!-- Mobile Container -->
+<div class="w-full max-w-md h-screen overflow-y-auto bg-background-light dark:bg-background-dark flex flex-col relative shadow-2xl">
+<!-- Header -->
+<div class="sticky top-0 z-50 flex items-center justify-between bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md px-4 pt-12 pb-4 border-b border-gray-200 dark:border-gray-800">
+<button class="text-slate-900 dark:text-white flex items-center justify-center p-2 rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<h1 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">Integration Details</h1>
+<button class="text-primary text-base font-semibold leading-normal tracking-wide px-2 hover:opacity-80 transition-opacity">
+                Docs
+            </button>
+</div>
+<!-- Scrollable Content -->
+<div class="flex-1 px-4 py-6 space-y-8 pb-24">
+<!-- Project Title Section -->
+<div>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold uppercase tracking-wider mb-3">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+                    Live Project
+                </span>
+<h2 class="text-slate-900 dark:text-white text-3xl font-bold leading-tight">Alpha Alerts</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm mt-2 leading-relaxed">
+                    Use your unique API key to authenticate requests. Keep this key confidential.
+                </p>
+</div>
+<!-- API Key Section -->
+<div class="space-y-3">
+<label class="text-slate-900 dark:text-white text-sm font-semibold">Public API Key</label>
+<div class="group relative flex items-center bg-white dark:bg-[#1c1f27] border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden shadow-sm transition-all focus-within:ring-2 focus-within:ring-primary focus-within:border-primary">
+<div class="pl-4 py-3.5 flex-1 font-mono text-slate-600 dark:text-slate-300 text-sm truncate select-all">
+                        pk_live_51Mz...8s9d
+                    </div>
+<div class="flex items-center border-l border-gray-200 dark:border-gray-700">
+<button class="p-3.5 hover:bg-gray-50 dark:hover:bg-gray-800 text-slate-400 dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-colors border-r border-gray-200 dark:border-gray-700" title="Toggle Visibility">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+<button class="p-3.5 hover:bg-gray-50 dark:hover:bg-gray-800 text-primary transition-colors flex items-center gap-2 active:bg-primary/10">
+<span class="material-symbols-outlined text-[20px]">content_copy</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Code Integration Section -->
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<label class="text-slate-900 dark:text-white text-sm font-semibold">Implementation</label>
+</div>
+<!-- Tabs -->
+<div class="p-1 bg-gray-200 dark:bg-[#1c1f27] rounded-xl flex gap-1">
+<button class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all bg-white dark:bg-primary text-slate-900 dark:text-white shadow-sm">
+                        cURL
+                    </button>
+<button class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-white/5">
+                        Node.js
+                    </button>
+<button class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-gray-100 dark:hover:bg-white/5">
+                        React
+                    </button>
+</div>
+<!-- Code Block -->
+<div class="relative bg-[#0d1117] border border-gray-800 rounded-xl overflow-hidden shadow-lg group">
+<!-- Top bar of terminal -->
+<div class="flex items-center justify-between px-4 py-2 bg-[#161b22] border-b border-gray-800">
+<div class="flex gap-1.5">
+<div class="w-2.5 h-2.5 rounded-full bg-red-500/50"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-yellow-500/50"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-green-500/50"></div>
+</div>
+<span class="text-[10px] uppercase font-mono text-slate-500">bash</span>
+</div>
+<!-- Code Content -->
+<div class="p-4 overflow-x-auto">
+<pre class="font-mono text-xs leading-relaxed text-slate-300"><code><span class="text-purple-400">curl</span> -X POST https://api.alpha.com/v1/alerts \
+  -H <span class="text-green-400">"Authorization: Bearer pk_live_..."</span> \
+  -H <span class="text-green-400">"Content-Type: application/json"</span> \
+  -d <span class="text-blue-400">'{
+    "title": "Server Status",
+    "message": "System operational",
+    "priority": "high"
+  }'</span></code></pre>
+</div>
+<!-- Copy Overlay Button (Visible on Hover/Focus) -->
+<div class="absolute top-12 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="bg-white/10 hover:bg-white/20 backdrop-blur-sm text-white p-2 rounded-lg border border-white/10 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Helpful Links -->
+<div class="pt-4 border-t border-gray-200 dark:border-gray-800">
+<a class="flex items-center justify-between p-4 rounded-xl bg-white dark:bg-[#1c1f27] border border-gray-200 dark:border-gray-700 hover:border-primary/50 transition-colors group" href="#">
+<div class="flex items-center gap-3">
+<div class="p-2 rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">menu_book</span>
+</div>
+<div class="flex flex-col">
+<span class="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-primary transition-colors">Read Documentation</span>
+<span class="text-xs text-slate-500 dark:text-slate-400">Detailed guides and references</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary transition-colors">chevron_right</span>
+</a>
+</div>
+</div>
+<!-- Sticky Footer Action -->
+<div class="absolute bottom-6 left-4 right-4 z-40">
+<button class="w-full bg-primary hover:bg-blue-600 text-white font-semibold py-4 px-6 rounded-xl shadow-lg shadow-primary/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">content_copy</span>
+                Copy Snippet
+            </button>
+</div>
+<!-- Background Gradient Effect -->
+<div class="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden z-0">
+<div class="absolute top-[-10%] right-[-10%] w-96 h-96 bg-primary/20 rounded-full blur-[100px] opacity-20 dark:opacity-10"></div>
+<div class="absolute bottom-[-10%] left-[-10%] w-64 h-64 bg-purple-500/20 rounded-full blur-[80px] opacity-20 dark:opacity-10"></div>
+</div>
+</div>
+</body></html>
