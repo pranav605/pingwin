@@ -1,6 +1,7 @@
 import { NotificationCard } from '@/components/notification-card';
 import { MOCK_NOTIFICATIONS } from '@/constants/mockData';
 import { Ionicons } from '@expo/vector-icons';
+import Constants from 'expo-constants';
 import { Stack, useRouter } from 'expo-router';
 import React from 'react';
 import { FlatList, Pressable, Text, View } from 'react-native';
@@ -12,7 +13,14 @@ export default function DashboardScreen() {
     const renderHeader = () => (
         <View className="pt-4 pb-4">
             <View className="flex-row items-center justify-between mb-8">
-                <Text className="text-white text-[28px] font-bold tracking-tight">Dashboard</Text>
+                <View>
+                    <Text className="text-white text-[28px] font-bold tracking-tight">Dashboard</Text>
+                    {Constants.expoConfig?.extra?.eas?.projectId && (
+                        <Text selectable className="text-white/60 text-xs mt-1 font-mono">
+                            ID: {Constants.expoConfig.extra.eas.projectId}
+                        </Text>
+                    )}
+                </View>
                 <View className="flex-row items-center gap-5">
                     <Pressable onPress={() => router.push('/create-project')}>
                         <Ionicons name="add-circle-outline" size={26} color="#3b82f6" />

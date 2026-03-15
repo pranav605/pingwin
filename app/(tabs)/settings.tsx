@@ -1,9 +1,12 @@
+import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SettingsScreen() {
+    const { expoPushToken, notification } = usePushNotifications();
+
     return (
         <SafeAreaView className="flex-1 bg-background justify-center items-center">
             <View className="items-center gap-4">
@@ -11,6 +14,10 @@ export default function SettingsScreen() {
                 <Text className="text-white text-2xl font-bold">Settings</Text>
                 <Text className="text-white/40 text-sm text-center px-10">
                     Configure your notification preferences, theme, and account details.
+                </Text>
+                <Text className="text-white/40 text-sm text-center px-10">For testing</Text>
+                <Text className="text-white/40 text-sm text-center px-10">
+                    {expoPushToken?.data}
                 </Text>
             </View>
         </SafeAreaView>
