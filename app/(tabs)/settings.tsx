@@ -1,7 +1,8 @@
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { Ionicons } from '@expo/vector-icons';
+import * as Clipboard from 'expo-clipboard';
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Button, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function SettingsScreen() {
@@ -19,6 +20,7 @@ export default function SettingsScreen() {
                 <Text className="text-white/40 text-sm text-center px-10">
                     {expoPushToken?.data}
                 </Text>
+                <Button title="Copy" onPress={() => Clipboard.setStringAsync(expoPushToken?.data || '')} />
             </View>
         </SafeAreaView>
     );
