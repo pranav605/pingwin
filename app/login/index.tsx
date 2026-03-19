@@ -4,13 +4,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { makeRedirectUri } from 'expo-auth-session';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
-import { Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View, useColorScheme } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function LoginScreen() {
   const router = useRouter();
+  const colorScheme = useColorScheme();
 
   const handleGoogleLogin = async () => {
     try {
@@ -48,44 +49,44 @@ export default function LoginScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-black justify-center">
+    <SafeAreaView className="flex-1 bg-white dark:bg-black justify-center">
       <View className="px-6 w-full max-w-sm mx-auto">
         <View className="mb-12">
-          <Text className="text-white text-4xl font-bold mb-2">Welcome Back</Text>
-          <Text className="text-gray-400 text-base">Sign in to continue to your dashboard</Text>
+          <Text className="text-black dark:text-white text-4xl font-bold mb-2">Welcome Back</Text>
+          <Text className="text-gray-600 dark:text-gray-400 text-base">Sign in to continue to your dashboard</Text>
         </View>
 
         <View className="gap-4">
           <TouchableOpacity
-            className="w-full bg-white flex-row items-center justify-center py-4 rounded-full"
+            className="w-full bg-gray-100 dark:bg-white flex-row items-center justify-center py-4 rounded-full"
             activeOpacity={0.8}
             onPress={() => {
               // Handle Apple Login
             }}
           >
-            <Ionicons name="logo-apple" size={24} color="black" className="mr-3" />
+            <Ionicons name="logo-apple" size={24} color={colorScheme === 'dark' ? 'black' : 'black'} className="mr-3" />
             <Text className="text-black font-semibold text-lg ml-2">Continue with Apple</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            className="w-full bg-[#333333] flex-row items-center justify-center py-4 rounded-full"
+            className="w-full bg-gray-50 dark:bg-[#333333] border border-gray-200 dark:border-transparent flex-row items-center justify-center py-4 rounded-full"
             activeOpacity={0.8}
             onPress={handleGoogleLogin}
           >
-            <Ionicons name="logo-google" size={24} color="white" className="mr-3" />
-            <Text className="text-white font-semibold text-lg ml-2">Continue with Google</Text>
+            <Ionicons name="logo-google" size={24} color={colorScheme === 'dark' ? 'white' : 'black'} className="mr-3" />
+            <Text className="text-black dark:text-white font-semibold text-lg ml-2">Continue with Google</Text>
           </TouchableOpacity>
         </View>
 
         <View className="mt-12 flex-row justify-center items-center">
-          <Text className="text-gray-400">Don't have an account? </Text>
+          <Text className="text-gray-600 dark:text-gray-400">Don't have an account? </Text>
           <TouchableOpacity onPress={() => router.replace('/signup' as any)}>
-            <Text className="text-white font-semibold">Sign Up</Text>
+            <Text className="text-black dark:text-white font-semibold">Sign Up</Text>
           </TouchableOpacity>
         </View>
 
         <TouchableOpacity onPress={() => AsyncStorage.setItem('hasCompletedOnboarding', 'false')}>
-          <Text className="text-white font-semibold">Set Onboarding False</Text>
+          <Text className="text-black dark:text-white font-semibold">Set Onboarding False</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

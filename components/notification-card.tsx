@@ -23,19 +23,19 @@ export function NotificationCard({ notification, onPress }: NotificationCardProp
     return (
         <Pressable
             onPress={onPress}
-            className="bg-card mb-4 p-4 rounded-xl border border-border"
+            className="bg-white dark:bg-zinc-900 mb-4 p-4 rounded-xl border border-gray-200 dark:border-zinc-800"
         >
             <View className="flex-row items-center justify-between mb-3">
                 <View className="flex-row items-center gap-3">
                     <View className={`w-7 h-7 rounded-md items-center justify-center ${config.bg}`}>
                         <Ionicons name={notification.projectIcon as any} size={14} color={config.iconColor} />
                     </View>
-                    <Text className="text-white/60 text-[11px] font-bold tracking-widest uppercase">
+                    <Text className="text-gray-600 dark:text-white/60 text-[11px] font-bold tracking-widest uppercase">
                         {notification.projectName}
                     </Text>
                 </View>
                 <View className="flex-row items-center gap-2">
-                    <Text className="text-white/40 text-[11px] font-medium">
+                    <Text className="text-gray-400 dark:text-white/40 text-[11px] font-medium">
                         {notification.timestamp}
                     </Text>
                     {notification.unread && (
@@ -44,18 +44,18 @@ export function NotificationCard({ notification, onPress }: NotificationCardProp
                 </View>
             </View>
 
-            <Text className="text-white font-bold text-[15px] mb-1">
+            <Text className="text-black dark:text-white font-bold text-[15px] mb-1">
                 {notification.title}
             </Text>
 
-            <Text className="text-white/50 text-[13px] leading-5 mb-4">
+            <Text className="text-gray-600 dark:text-white/50 text-[13px] leading-5 mb-4">
                 {notification.message}
             </Text>
 
             <View className="flex-row items-center gap-3">
                 <SeverityTag severity={notification.severity} />
                 {notification.metadata && (
-                    <Text className="text-white/30 text-[11px] font-mono">
+                    <Text className="text-gray-400 dark:text-white/30 text-[11px] font-mono">
                         {notification.metadata}
                     </Text>
                 )}

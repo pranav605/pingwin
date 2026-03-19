@@ -7,7 +7,7 @@ export default function OnboardingStep1() {
   const router = useRouter();
 
   return (
-    <SafeAreaView className="flex-1 bg-black">
+    <SafeAreaView className="flex-1 bg-white dark:bg-black">
       {/* Top Half */}
       <View className="flex-auto items-center justify-center p-8">
         <Image
@@ -20,10 +20,10 @@ export default function OnboardingStep1() {
       {/* Bottom Half */}
       <View className="px-6 pb-12 w-full flex-auto justify-end mb-10">
         <View className="mb-10">
-          <Text className="text-white text-3xl font-bold mb-4">
+          <Text className="text-black dark:text-white text-3xl font-bold mb-4">
             Welcome to Pingwin
           </Text>
-          <Text className="text-gray-400 text-base leading-6">
+          <Text className="text-gray-600 dark:text-gray-400 text-base leading-6">
             Engage with your audience and easily manage your projects from one powerful dashboard. Get ready to elevate your notifications.
           </Text>
         </View>
@@ -33,9 +33,9 @@ export default function OnboardingStep1() {
             Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             router.push('/onboarding/step2' as any)
           }}
-          className="bg-white w-full py-4 rounded-full items-center justify-center shadow-lg active:opacity-80"
+          className="bg-black dark:bg-white w-full py-4 rounded-full items-center justify-center shadow-lg active:opacity-80"
         >
-          <Text className="text-black font-semibold text-lg">
+          <Text className="text-white dark:text-black font-semibold text-lg">
             Continue
           </Text>
         </Pressable>

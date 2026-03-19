@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import { Stack, useRouter } from 'expo-router';
 import React from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View, useColorScheme } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ProjectIntegrationScreen() {
@@ -12,6 +12,7 @@ export default function ProjectIntegrationScreen() {
     const [copied, setCopied] = React.useState(false);
     const [snippetCopied, setSnippetCopied] = React.useState(false);
     const [activeTab, setActiveTab] = React.useState<'curl' | 'node' | 'react'>('curl');
+    const colorScheme = useColorScheme();
 
     const copyApiKey = async () => {
         await Clipboard.setStringAsync(apiKey);
@@ -57,7 +58,7 @@ const handleAlert = () => {
     };
 
     return (
-        <SafeAreaView className="flex-1 bg-[#09090b]">
+        <SafeAreaView className="flex-1 bg-gray-50 dark:bg-[#09090b]" >
             <Stack.Screen
                 options={{
                     headerShown: false,
@@ -65,11 +66,11 @@ const handleAlert = () => {
             />
 
             {/* Custom Header to avoid notch issues */}
-            <View className="flex-row items-center px-6 py-4 border-b border-white/5">
+            <View className="flex-row items-center px-6 py-4 border-b border-black/5 dark:border-white/5">
                 <Pressable onPress={() => router.back()} className="mr-5">
-                    <Ionicons name="arrow-back" size={24} color="rgba(255,255,255,0.6)" />
+                    <Ionicons name="arrow-back" size={24} color={colorScheme === 'dark' ? "rgba(255,255,255,0.6)" : "rgba(0,0,0,0.6)"} />
                 </Pressable>
-                <Text className="text-white text-[19px] font-bold tracking-tight">Integration Details</Text>
+                <Text className="text-black dark:text-white text-[19px] font-bold tracking-tight">Integration Details</Text>
             </View>
 
             <ScrollView
@@ -82,44 +83,44 @@ const handleAlert = () => {
                         <View className="w-2 h-2 rounded-full bg-blue-500" />
                         <Text className="text-blue-500 text-[10px] font-black uppercase tracking-widest">Live Project</Text>
                     </View>
-                    <Text className="text-white text-4xl font-bold mb-3">Alpha Alerts</Text>
-                    <Text className="text-white/40 text-sm leading-6">
+                    <Text className="text-black dark:text-white text-4xl font-bold mb-3">Alpha Alerts</Text>
+                    <Text className="text-gray-500 dark:text-white/40 text-sm leading-6">
                         Use your unique API key to authenticate requests. Keep this key confidential.
                     </Text>
                 </View>
 
                 <View className="mb-10">
-                    <Text className="text-white/60 text-sm font-bold uppercase tracking-widest mb-3">Public API Key</Text>
-                    <View className="flex-row items-center bg-zinc-900 border border-border rounded-xl overflow-hidden h-12">
+                    <Text className="text-gray-600 dark:text-white/60 text-sm font-bold uppercase tracking-widest mb-3">Public API Key</Text>
+                    <View className="flex-row items-center bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl overflow-hidden h-12">
                         <View className="flex-1 px-4 py-4">
-                            <Text className="text-white font-mono text-xs" numberOfLines={1}>
+                            <Text className="text-black dark:text-white font-mono text-xs" numberOfLines={1}>
                                 {apiKey.substring(0, 10)}...{apiKey.substring(apiKey.length - 8)}
                             </Text>
                         </View>
-                        <View className="flex-row items-center border-l border-border h-full">
+                        <View className="flex-row items-center border-l border-gray-200 dark:border-zinc-800 h-full">
                             <Pressable className="px-4 h-full items-center justify-center opacity-40">
-                                <Ionicons name="eye-outline" size={20} color="white" />
+                                <Ionicons name="eye-outline" size={20} color={colorScheme === 'dark' ? "white" : "black"} />
                             </Pressable>
                             <Pressable
                                 onPress={copyApiKey}
-                                className={`px-4 h-full items-center justify-center border-l border-border ${copied ? 'bg-emerald-500/10' : ''}`}
+                                className={`px-4 h-full items-center justify-center border-l border-gray-200 dark:border-zinc-800 ${copied ? 'bg-emerald-500/10' : ''}`}
                             >
-                                <Ionicons name={copied ? "checkmark" : "copy-outline"} size={20} color={copied ? "#10b981" : "white"} />
+                                <Ionicons name={copied ? "checkmark" : "copy-outline"} size={20} color={copied ? "#10b981" : (colorScheme === 'dark' ? "white" : "black")} />
                             </Pressable>
                         </View>
                     </View>
                 </View>
 
                 <View className="">
-                    <Text className="text-white/60 text-sm font-bold uppercase tracking-widest mb-4">Implementation</Text>
-                    <View className="flex-row bg-zinc-900 p-1 rounded-xl border border-border mb-6">
+                    <Text className="text-gray-600 dark:text-white/60 text-sm font-bold uppercase tracking-widest mb-4">Implementation</Text>
+                    <View className="flex-row bg-gray-200 dark:bg-zinc-900 p-1 rounded-xl border border-gray-300 dark:border-zinc-800 mb-6">
                         {(['curl', 'node', 'react'] as const).map((tab) => (
                             <Pressable
                                 key={tab}
                                 onPress={() => setActiveTab(tab)}
                                 className={`flex-1 py-2.5 rounded-lg items-center ${activeTab === tab ? 'bg-blue-600' : ''}`}
                             >
-                                <Text className={`text-xs font-bold uppercase tracking-widest ${activeTab === tab ? 'text-white' : 'text-white/40'}`}>
+                                <Text className={`text-xs font-bold uppercase tracking-widest ${activeTab === tab ? 'text-white' : 'text-gray-500 dark:text-white/40'}`}>
                                     {tab === 'curl' ? 'cURL' : tab === 'node' ? 'Node.js' : 'React'}
                                 </Text>
                             </Pressable>
@@ -132,12 +133,12 @@ const handleAlert = () => {
                 </View>
             </ScrollView>
 
-            <View className="absolute bottom-6 left-6 right-6 flex-row gap-3">
+            <View className=" px-6 flex-row gap-3">
                 <Pressable
                     onPress={() => router.replace('/(tabs)/projects')}
-                    className="flex-1 bg-zinc-800 py-5 rounded-2xl items-center justify-center border border-white/10 active:bg-zinc-700"
+                    className="flex-1 bg-white dark:bg-zinc-800 py-5 rounded-2xl items-center justify-center border border-gray-200 dark:border-white/10 active:bg-gray-100 dark:active:bg-zinc-700"
                 >
-                    <Text className="text-white font-black text-base uppercase tracking-widest">
+                    <Text className="text-black dark:text-white font-black text-base uppercase tracking-widest">
                         Close
                     </Text>
                 </Pressable>
