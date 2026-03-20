@@ -1,7 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
-import { Image, Pressable, Text, View } from 'react-native';
+import LottieView from 'lottie-react-native';
+import { Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function OnboardingStep2() {
@@ -22,10 +23,14 @@ export default function OnboardingStep2() {
     <SafeAreaView className="flex-1 bg-white dark:bg-black" >
       {/* Top Half */}
       <View className="flex-auto items-center justify-center p-8">
-        <Image
-          source={require('@/assets/images/icon-no-bg.png')}
-          className="w-48 h-48"
-          resizeMode="contain"
+        <LottieView
+          autoPlay
+          loop={false}
+          style={{
+            width: 400,
+            height: 400,
+          }}
+          source={require('@/assets/lottie/Notification-remix.json')}
         />
       </View>
 

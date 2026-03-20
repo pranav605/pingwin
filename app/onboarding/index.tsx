@@ -1,19 +1,24 @@
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
-import { Image, Pressable, Text, View } from 'react-native';
+import LottieView from 'lottie-react-native';
+import { Pressable, Text, View, useColorScheme } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function OnboardingStep1() {
   const router = useRouter();
-
+  const colorScheme = useColorScheme();
   return (
     <SafeAreaView className="flex-1 bg-white dark:bg-black">
       {/* Top Half */}
       <View className="flex-auto items-center justify-center p-8">
-        <Image
-          source={require('@/assets/images/icon-no-bg.png')}
-          className="w-48 h-48"
-          resizeMode="contain"
+        <LottieView
+          autoPlay
+          loop={false}
+          style={{
+            width: 400,
+            height: 400,
+          }}
+          source={colorScheme == "dark" ? require('@/assets/lottie/logo-dark.json') : require('@/assets/lottie/logo-light.json')}
         />
       </View>
 
