@@ -1,6 +1,5 @@
 import { supabase } from '@/lib/supabase';
 import { Ionicons } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { makeRedirectUri } from 'expo-auth-session';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
@@ -38,7 +37,7 @@ export default function LoginScreen() {
             const refresh_token = params.get('refresh_token');
             if (access_token && refresh_token) {
               await supabase.auth.setSession({ access_token, refresh_token });
-              router.replace('/(tabs)/dashboard' as any);
+              router.replace('/(tabs)' as any);
             }
           }
         }
@@ -85,9 +84,13 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity onPress={() => AsyncStorage.setItem('hasCompletedOnboarding', 'false')}>
+        {/* <TouchableOpacity onPress={() => AsyncStorage.setItem('hasCompletedOnboarding', 'false')}>
           <Text className="text-black dark:text-white font-semibold">Set Onboarding False</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity onPress={() => router.replace('/onboarding' as any)}>
+          <Text className="text-black dark:text-white font-semibold">Navigate to Onboarding</Text>
+        </TouchableOpacity> */}
       </View>
     </SafeAreaView>
   );

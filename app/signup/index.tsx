@@ -35,8 +35,10 @@ export default function SignupScreen() {
             const access_token = params.get('access_token');
             const refresh_token = params.get('refresh_token');
             if (access_token && refresh_token) {
-              await supabase.auth.setSession({ access_token, refresh_token });
-              router.replace('/(tabs)/dashboard' as any);
+             await supabase.auth.setSession({ access_token, refresh_token });
+             // After setting the session, the user is considered signed in.
+             // Redirect to the main tabs screen.
+             router.replace('/(tabs)' as any);
             }
           }
         }
