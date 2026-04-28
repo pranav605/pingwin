@@ -1,17 +1,84 @@
-import { MOCK_PROJECTS } from '@/constants/mockData';
+import { supabase } from '@/lib/supabase';
 import { Project } from '@/types';
 import { Ionicons } from '@expo/vector-icons';
+import Constants from "expo-constants";
 import { useRouter } from 'expo-router';
-import React from 'react';
-import { Pressable, ScrollView, Text, View, useColorScheme } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, RefreshControl, ScrollView, Text, View, useColorScheme } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ProjectsScreen() {
     const router = useRouter();
     const colorScheme = useColorScheme();
+    
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
 
-    const activeCount = MOCK_PROJECTS.filter(p => p.status === 'active').length;
-    const inactiveCount = MOCK_PROJECTS.filter(p => p.status !== 'active').length;
+    const fetchProjects = async () => {
+        try {
+            const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+            if (sessionError) throw sessionError;
+            
+            const session = sessionData?.session;
+            if (!session) {
+                // Not authenticated
+                setLoading(false);
+                setRefreshing(false);
+                return;
+            }
+
+            const backendUrl = ( Constants.expoConfig?.extra?.backendUrl ) as string;
+            if (!backendUrl) {
+                console.warn('Backend URL not found in environment variables');
+            }
+
+            const response = await fetch(`${backendUrl}/api/projects`, {
+                headers: {
+                    Authorization: `Bearer ${session.access_token}`,
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                console.log(JSON.stringify(response));
+                throw new Error(`API returned ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            // Map backend data to frontend Project type
+            const mappedProjects: Project[] = data.map((p: any) => ({
+                id: p.id,
+                name: p.name,
+                description: p.description,
+                status: p.is_active ? 'active' : 'inactive',
+                icon: 'cube-outline', // default icon
+                alertsToday: '0',     // default
+                apiKey: '',
+            }));
+
+            setProjects(mappedProjects);
+        } catch (error: any) {
+            console.error('Error fetching projects:', error.message);
+            Alert.alert('Error', 'Failed to load projects');
+        } finally {
+            setLoading(false);
+            setRefreshing(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchProjects();
+    }, []);
+
+    const onRefresh = () => {
+        setRefreshing(true);
+        fetchProjects();
+    };
+
+    const activeCount = projects.filter(p => p.status === 'active').length;
+    const inactiveCount = projects.filter(p => p.status !== 'active').length;
 
     const renderProjectCard = (project: Project) => {
         let statusColor = '';
@@ -50,7 +117,7 @@ export default function ProjectsScreen() {
                             </View>
                             <View>
                                 <Text className="text-black dark:text-white text-lg font-bold mb-0.5">{project.name}</Text>
-                                <Text className="text-gray-500 dark:text-white/40 font-mono text-[11px] tracking-wider">ID: {project.id}</Text>
+                                {/* <Text className="text-gray-500 dark:text-white/40 font-mono text-[11px] text-ellipsis">ID: {project.id}</Text> */}
                             </View>
                         </View>
                         <View className={`px-2.5 py-1 rounded-full flex-row items-center gap-1.5 ${statusBg}`}>
@@ -102,7 +169,13 @@ export default function ProjectsScreen() {
                 </View>
             </View>
 
-            <ScrollView className="flex-1 px-5" showsVerticalScrollIndicator={false}>
+            <ScrollView 
+                className="flex-1 px-5" 
+                showsVerticalScrollIndicator={false}
+                refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colorScheme === 'dark' ? '#fff' : '#000'} />
+                }
+            >
                 <View className="py-6">
                     <Pressable
                         onPress={() => router.push('/create-project')}
@@ -119,10 +192,19 @@ export default function ProjectsScreen() {
                         Your Projects
                     </Text>
 
-                    {MOCK_PROJECTS.map(renderProjectCard)}
+                    {loading ? (
+                        <ActivityIndicator size="large" color="#3b82f6" className="mt-8" />
+                    ) : projects.length === 0 ? (
+                        <View className="items-center py-8">
+                            <Text className="text-gray-500 mt-4">No projects found</Text>
+                        </View>
+                    ) : (
+                        projects.map(renderProjectCard)
+                    )}
                 </View>
                 <View className="h-6" />
             </ScrollView>
         </SafeAreaView>
     );
 }
+

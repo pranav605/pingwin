@@ -1,15 +1,17 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack, useRouter, useSegments } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import "../global.css";
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
-import { useEffect, useState } from 'react';
-import * as SplashScreen from 'expo-splash-screen';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { supabase } from '@/lib/supabase';
+import { getDeviceId } from '@/utils/registerDevice';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -17,17 +19,67 @@ SplashScreen.preventAutoHideAsync();
 export const unstable_settings = {
   anchor: 'index',
 };
+const backendUrl = Constants.expoConfig?.extra?.backendUrl as string;
+
+const syncPushToken = async (token: string) => {
+  try {
+    const { data: { session } } = await supabase.auth.getSession();
+
+    if (!session) return;
+
+    const deviceId = await getDeviceId();
+
+    await fetch(`${backendUrl}/api/tokens/upsert`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        token,
+        device_id: deviceId,
+      }),
+    });
+  } catch (err) {
+    console.error('Push token sync failed:', err);
+  }
+};
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   const { expoPushToken } = usePushNotifications();
   const router = useRouter();
-  const segments = useSegments();
 
   useEffect(() => {
-    if (expoPushToken) {
-      console.log("RootLayout registered push token:", expoPushToken.data);
+    const init = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (session && expoPushToken?.data) {
+        await syncPushToken(expoPushToken.data);
+      }
+    };
+
+    init();
+  }, []);
+  
+  useEffect(() => {
+    if (expoPushToken?.data) {
+      syncPushToken(expoPushToken.data);
     }
+  }, [expoPushToken]);
+
+  useEffect(() => {
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        if (event === 'SIGNED_IN' && expoPushToken?.data) {
+          await syncPushToken(expoPushToken.data);
+        }
+      }
+    );
+
+    return () => {
+      listener.subscription.unsubscribe();
+    };
   }, [expoPushToken]);
 
   useEffect(() => {

@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import { Ionicons } from '@expo/vector-icons';
 import { makeRedirectUri } from 'expo-auth-session';
+import Constants from 'expo-constants';
 import { useRouter } from 'expo-router';
 import * as WebBrowser from 'expo-web-browser';
 import { Text, TouchableOpacity, View, useColorScheme } from 'react-native';
@@ -11,6 +12,7 @@ WebBrowser.maybeCompleteAuthSession();
 export default function LoginScreen() {
   const router = useRouter();
   const colorScheme = useColorScheme();
+  const backendUrl = ( Constants.expoConfig?.extra?.backendUrl ) as string;
 
   const handleGoogleLogin = async () => {
     try {
@@ -83,7 +85,7 @@ export default function LoginScreen() {
             <Text className="text-black dark:text-white font-semibold">Sign Up</Text>
           </TouchableOpacity>
         </View>
-
+        <Text className="text-black dark:text-white font-semibold">test backend url: {backendUrl}</Text>
         {/* <TouchableOpacity onPress={() => AsyncStorage.setItem('hasCompletedOnboarding', 'false')}>
           <Text className="text-black dark:text-white font-semibold">Set Onboarding False</Text>
         </TouchableOpacity>
