@@ -1,7 +1,6 @@
 import { NotificationCard } from '@/components/notification-card';
 import { MOCK_NOTIFICATIONS } from '@/constants/mockData';
 import { Ionicons } from '@expo/vector-icons';
-import Constants from 'expo-constants';
 import { Stack, useRouter } from 'expo-router';
 import React from 'react';
 import { FlatList, Pressable, Text, View, useColorScheme } from 'react-native';
@@ -23,17 +22,12 @@ export default function DashboardScreen() {
     );
 
     return (
-        <SafeAreaView className="flex-1 bg-gray-50 dark:bg-[#09090b]">
+        <SafeAreaView className="flex-1 bg-gray-50 dark:bg-[#09090b]" edges={['top']}>
             <Stack.Screen options={{ headerShown: false }} />
             <View className="px-4">
                 <View className="flex-row items-center justify-between mb-8">
                     <View>
                         <Text className="text-black dark:text-white text-[28px] font-bold tracking-tight">Dashboard</Text>
-                        {Constants.expoConfig?.extra?.eas?.projectId && (
-                            <Text selectable className="text-gray-500 dark:text-white/60 text-xs mt-1 font-mono">
-                                ID: {Constants.expoConfig.extra.eas.projectId}
-                            </Text>
-                        )}
                     </View>
                     <View className="flex-row items-center gap-5">
                         <Pressable onPress={() => router.push('/create-project')}>

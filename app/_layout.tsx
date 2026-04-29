@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import "../global.css";
 
+import { ProjectsProvider } from '@/context/ProjectContext';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { supabase } from '@/lib/supabase';
@@ -61,7 +62,7 @@ export default function RootLayout() {
 
     init();
   }, []);
-  
+
   useEffect(() => {
     if (expoPushToken?.data) {
       syncPushToken(expoPushToken.data);
@@ -108,6 +109,7 @@ export default function RootLayout() {
   }, []);
 
   return (
+    <ProjectsProvider>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -115,10 +117,11 @@ export default function RootLayout() {
         <Stack.Screen name="login/index" options={{ headerShown: false }} />
         <Stack.Screen name="signup/index" options={{ headerShown: false }} />
         <Stack.Screen name="create-project" options={{ presentation: 'modal' }} />
-        <Stack.Screen name="project-integration" />
+        <Stack.Screen name="project-integration" options={{ animation: 'default'}}/>
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
+    </ProjectsProvider>
   );
 }

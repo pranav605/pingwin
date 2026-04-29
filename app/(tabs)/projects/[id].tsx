@@ -1,16 +1,19 @@
 import { MOCK_NOTIFICATIONS, MOCK_PROJECTS } from '@/constants/mockData';
+import { useProjects } from '@/context/ProjectContext';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Modal, Pressable, ScrollView, Switch, Text, TextInput, View, useColorScheme } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+
+
 export default function ProjectDetailsScreen() {
     const { id } = useLocalSearchParams();
     const router = useRouter();
     const [settingsVisible, setSettingsVisible] = useState(false);
     const colorScheme = useColorScheme();
-
-    const project = MOCK_PROJECTS.find(p => p.id === id) || MOCK_PROJECTS[0];
+    const { projects } = useProjects();
+    const project = projects.find(p => p.id === id) || MOCK_PROJECTS[0];
     const projectNotifications = MOCK_NOTIFICATIONS.filter(n => n.projectName === project.name.toUpperCase());
 
     const [projectName, setProjectName] = useState(project.name);

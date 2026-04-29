@@ -1,80 +1,22 @@
-import { supabase } from '@/lib/supabase';
+import { useProjects } from '@/context/ProjectContext';
 import { Project } from '@/types';
 import { Ionicons } from '@expo/vector-icons';
-import Constants from "expo-constants";
 import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Pressable, RefreshControl, ScrollView, Text, View, useColorScheme } from 'react-native';
+import React, { useState } from 'react';
+import { ActivityIndicator, Pressable, RefreshControl, ScrollView, Text, View, useColorScheme } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function ProjectsScreen() {
     const router = useRouter();
     const colorScheme = useColorScheme();
     
-    const [projects, setProjects] = useState<Project[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { projects, loading, refresh } = useProjects();
     const [refreshing, setRefreshing] = useState(false);
 
-    const fetchProjects = async () => {
-        try {
-            const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-            if (sessionError) throw sessionError;
-            
-            const session = sessionData?.session;
-            if (!session) {
-                // Not authenticated
-                setLoading(false);
-                setRefreshing(false);
-                return;
-            }
-
-            const backendUrl = ( Constants.expoConfig?.extra?.backendUrl ) as string;
-            if (!backendUrl) {
-                console.warn('Backend URL not found in environment variables');
-            }
-
-            const response = await fetch(`${backendUrl}/api/projects`, {
-                headers: {
-                    Authorization: `Bearer ${session.access_token}`,
-                    'Content-Type': 'application/json',
-                }
-            });
-
-            if (!response.ok) {
-                console.log(JSON.stringify(response));
-                throw new Error(`API returned ${response.status}`);
-            }
-
-            const data = await response.json();
-            
-            // Map backend data to frontend Project type
-            const mappedProjects: Project[] = data.map((p: any) => ({
-                id: p.id,
-                name: p.name,
-                description: p.description,
-                status: p.is_active ? 'active' : 'inactive',
-                icon: 'cube-outline', // default icon
-                alertsToday: '0',     // default
-                apiKey: '',
-            }));
-
-            setProjects(mappedProjects);
-        } catch (error: any) {
-            console.error('Error fetching projects:', error.message);
-            Alert.alert('Error', 'Failed to load projects');
-        } finally {
-            setLoading(false);
-            setRefreshing(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchProjects();
-    }, []);
-
-    const onRefresh = () => {
+    const onRefresh = async () => {
         setRefreshing(true);
-        fetchProjects();
+        await refresh();
+        setRefreshing(false);
     };
 
     const activeCount = projects.filter(p => p.status === 'active').length;
