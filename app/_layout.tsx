@@ -4,6 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import "../global.css";
 
+import { NotificationProvider } from '@/context/NotificationContext';
 import { ProjectsProvider } from '@/context/ProjectContext';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
@@ -110,18 +111,20 @@ export default function RootLayout() {
 
   return (
     <ProjectsProvider>
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-        <Stack.Screen name="login/index" options={{ headerShown: false }} />
-        <Stack.Screen name="signup/index" options={{ headerShown: false }} />
-        <Stack.Screen name="create-project" options={{ presentation: 'modal' }} />
-        <Stack.Screen name="project-integration" options={{ animation: 'default'}}/>
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+      <NotificationProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="onboarding" options={{ headerShown: false }} />
+            <Stack.Screen name="login/index" options={{ headerShown: false }} />
+            <Stack.Screen name="signup/index" options={{ headerShown: false }} />
+            <Stack.Screen name="create-project" options={{ presentation: 'modal' }} />
+            <Stack.Screen name="project-integration" options={{ animation: 'default' }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+          </Stack>
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </NotificationProvider>
     </ProjectsProvider>
   );
 }

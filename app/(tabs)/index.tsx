@@ -1,14 +1,18 @@
 import { NotificationCard } from '@/components/notification-card';
-import { MOCK_NOTIFICATIONS } from '@/constants/mockData';
+import { useNotifications } from '@/context/NotificationContext';
+import { useProjects } from '@/context/ProjectContext';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, Pressable, Text, View, useColorScheme } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function DashboardScreen() {
     const router = useRouter();
     const colorScheme = useColorScheme();
+    const { projects } = useProjects();
+    const projectFilter = useState('all');
+    const { notifications } = useNotifications();
 
     const renderHeader = () => (
         <View className="pt-4 pb-4">
@@ -44,16 +48,21 @@ export default function DashboardScreen() {
                         <Ionicons name="grid" size={14} color="white" />
                         <Text className="text-white font-bold text-[11px] uppercase tracking-widest">All</Text>
                     </Pressable>
-                    <Pressable className="px-5 py-2.5 rounded-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
-                        <Text className="text-gray-600 dark:text-white/60 font-bold text-[11px] uppercase tracking-widest">API Gateway</Text>
+                    
+                    {
+                        projects?.map((p, idx) => {
+                            return <Pressable key={p.id} className="px-5 py-2.5 rounded-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
+                        <Text className="text-gray-600 dark:text-white/60 font-bold text-[11px] uppercase tracking-widest">{p.name}</Text>
                     </Pressable>
-                    <Pressable className="px-5 py-2.5 rounded-full bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
-                        <Text className="text-gray-600 dark:text-white/60 font-bold text-[11px] uppercase tracking-widest">Auth Service</Text>
-                    </Pressable>
+                        })
+                    }
                 </View>
             </View>
+            {notifications.length === 0 ? (<View className="flex-1 items-center justify-center">
+                    <Ionicons name="notifications-off-outline" size={48} color={colorScheme === 'dark' ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)"} />
+                </View>) :
             <FlatList
-                data={MOCK_NOTIFICATIONS}
+                data={notifications}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => <NotificationCard notification={item} />}
                 ListHeaderComponent={renderHeader}
@@ -61,6 +70,7 @@ export default function DashboardScreen() {
                 showsVerticalScrollIndicator={false}
                 className="flex-1 px-4"
             />
+        }
         </SafeAreaView>
     );
 }
