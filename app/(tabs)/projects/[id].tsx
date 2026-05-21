@@ -1,4 +1,5 @@
 import { MOCK_NOTIFICATIONS, MOCK_PROJECTS } from '@/constants/mockData';
+import { useNotifications } from '@/context/NotificationContext';
 import { useProjects } from '@/context/ProjectContext';
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -18,15 +19,10 @@ export default function ProjectDetailsScreen() {
 
     const [projectName, setProjectName] = useState(project.name);
     const [isActive, setIsActive] = useState(project.status === 'active');
+    const {notifications} = useNotifications();
 
     // Mock specific recent notifications for the mockup if the normal ones are empty
-    const displayNotifications = [
-        { id: '1', title: 'Webhook timeout detected', message: 'Connection timed out after 3000ms while waiting for...', severity: 'critical', timestamp: '10:42 AM' },
-        { id: '2', title: 'High latency on endpoint /charge', message: 'Average response time exceeded 500ms threshold.', severity: 'warning', timestamp: '09:15 AM' },
-        { id: '3', title: 'Deployment Successful', message: 'Version v2.4.1 deployed to production.', severity: 'info', timestamp: '08:30 AM' },
-        { id: '4', title: 'Daily Backup Completed', message: 'Database snapshot stored in S3 bucket.', severity: 'info', timestamp: 'Yesterday' },
-        { id: '5', title: 'API Rate Limit Exceeded', message: 'Client 10.0.2.15 exceeded 1000 req/min.', severity: 'critical', timestamp: 'Yesterday' }
-    ];
+    const displayNotifications = notifications.filter(n => n.projectName.toLowerCase() === project.name.toLowerCase());;
 
     let iconBg = 'bg-zinc-800';
     let iconColor = '#A1A1AA';
@@ -113,11 +109,12 @@ export default function ProjectDetailsScreen() {
                     </View>
 
                     <View className="pl-1 pr-4">
-                        {displayNotifications.map((notif, index) => {
-                            let dotColor = '';
-                            if (notif.severity === 'critical') dotColor = 'bg-red-500';
-                            if (notif.severity === 'warning') dotColor = 'bg-amber-500';
-                            if (notif.severity === 'info') dotColor = 'bg-blue-500';
+                        {displayNotifications.length > 0 ? (
+                            displayNotifications.map((notif, index) => {
+                                let dotColor = '';
+                                if (notif.severity === 'critical') dotColor = 'bg-red-500';
+                                if (notif.severity === 'warning') dotColor = 'bg-amber-500';
+                                if (notif.severity === 'info') dotColor = 'bg-blue-500';
 
                             return (
                                 <View key={notif.id} className={`flex-row gap-4 py-4 ${index !== displayNotifications.length - 1 ? 'border-b border-gray-200 dark:border-white/5' : ''}`}>
@@ -138,7 +135,12 @@ export default function ProjectDetailsScreen() {
                                     </View>
                                 </View>
                             );
-                        })}
+                        })) : (
+                            <View className="flex-1 items-center justify-center py-10">
+                                <Ionicons name="notifications-off-outline" size={48} color={colorScheme === 'dark' ? "rgba(255,255,255,0.3)" : "rgba(0,0,0,0.3)"} />
+                                <Text className="text-gray-500 dark:text-white/30 text-sm mt-3">No notifications for this project yet.</Text>
+                            </View>
+                        )}
                     </View>
                 </View>
 
