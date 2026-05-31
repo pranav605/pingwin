@@ -45,7 +45,7 @@ export const NotificationProvider = ({ children }:any) => {
                 status: n.status,
                 timestamp: Date.now() - new Date(n.created_at).getTime() < 86400000 ? Date.now() - new Date(n.created_at).getTime() < 60000 ? 'just now' : 'today' : 'older',
                 projectName: n.project?.name || 'General',
-                projectIcon: 'person',
+                projectIcon: n.project?.icon,
                 severity: 'info'
      }));
       setNotifications(mappedNotifications);

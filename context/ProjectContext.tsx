@@ -42,7 +42,7 @@ export const ProjectsProvider = ({ children }:any) => {
                 name: p.name,
                 description: p.description,
                 status: p.is_active ? 'active' : 'inactive',
-                icon: 'cube-outline', // default icon
+                icon: p.icon, // default icon
                 alertsToday: '0',     // default
                 apiKey: '',
      }));
